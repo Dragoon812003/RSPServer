@@ -1,10 +1,11 @@
 from flask import Flask, render_template, Response, json, request, redirect
 import cv2
 import numpy as np
-
+# from move import *
 
 app=Flask(__name__)
 camera = cv2.VideoCapture(0)
+# IR1, IR2, IL1, IL2, enable12, enable34 = setup()
 
 process_this_frame = True
 
@@ -35,12 +36,16 @@ def move():
     if request.method == "POST":
         direction = request.form['direction']
         if direction == "forward":
+            # go_forward(IR1, IR2, IL1, IL2)
             pass
         elif direction == "left":
+            # go_left(IR1, IR2, IL1, IL2)
             pass
         elif direction == "right":
+            # go_right(IR1, IR2, IL1, IL2)
             pass
         elif direction == "backward":
+            # go_backward(IR1, IR2, IL1, IL2)
             pass
         print(direction)
         return json.dumps({'status': 'OK'})

@@ -1,48 +1,155 @@
 <!DOCTYPE html>
 <html>
+<meta content="width=device-width, initial-scale=1" name="viewport" />
 
 <style>
 
 *{
     overflow: hidden;
-    margin-left: 10px;
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 .container{
     width: 100vw;
+    height: 100vh;
 }
 
-.buttons-container{
+.video-and-sensor-info{
+    width: 100vw;
+    height: 75vh;
     display: flex;
-    flex-direction: column;
+    background-color: beige;
+}
+
+.video{
+    height: 100% !important;
+    width: 60% !important;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    background-color: black;
+}
+
+.sensor-info-container{
+    height: 100% !important;
+    width: 40% !important;
+    padding-top: 10px;
+}
+
+.sensor-heading{
+    display: flex;
+}
+
+.sensor-heading h1{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#fullscreen-btn{
+    margin-right: 25px;
+    background: transparent;
+}
+
+#fullscreen-btn:hover{
+    background-color: lightgray;
+}
+
+.sensor-info{
+    width: 100%;
+}   
+
+.sensor-info-value-container{
+    margin-left: 15px;
+    display: flex;
+    font-size: x-large;
+    width: 100%;
+    margin-top: 15px;
+}
+
+@media screen and (max-width: 768px) {
+    .sensor-info-value-container{
+        font-size: small;
+    }
+
+    #fullscreen-btn{
+    margin-right: 0px;
+}
+}
+
+.sensor-info-title{
+    width: 40%;
+    font-weight: bolder;
+}
+
+.buttons{
+    width: 100vw;
+    height: 25vh;
+    display: flex;
+}
+
+.nav-buttons{
+    width: 70%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: azure;
 }
 
 .nav-button{
+    background: transparent;
+    width: 50px;
+    height: 50px;
+    transition: 0.25s;
+}
+
+.nav-button:hover{
+    width: 60px;
+    height: 60px;
+}
+
+.arm-buttons{
+    width: 30%;
+    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
+    background-color: lavender;
 }
 
-.row1 {
-    width: 250px;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-    
-.row2{
-    width: 250px;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
+.arm-btn{
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    font-size: large;
+    font-weight: 900;
+    border: 2px solid black;
+    transition: 0.25s;
 }
 
-.row3{
-    width: 250px;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
+#arm-start-btn{
+    background-color: green;
+}
+
+#arm-start-btn:hover{
+    background-color: rgb(36, 153, 36);
+    font-size: x-large;
+    width: 90px;
+    height: 90px;
+}
+
+#arm-stop-btn{
+    background-color: red;
+}
+
+#arm-stop-btn:hover{
+    background-color: rgb(255, 50, 50);
+    font-size: x-large;
+    width: 90px;
+    height: 90px;
 }
 
 .forward-arrow{
@@ -64,30 +171,63 @@
 </style>
 
 <body>
-    <div class="container">
-        <h3 class="mt-5">Land Mine Detector</h3>
-        <div class="video-container">
-            <img src="{{ url_for('video_feed') }}" height="30%" style="border: 2px solid black">
-            <!-- <img src="{{ url_for('static', filename='img/arrow.png') }}" height="30%" style="border: 2px solid black"> -->
-        </div>
-        <div class="buttons-container">
-            <div class="row1">
-                <form id="go-forward-form" method="POST" action="{{ url_for('move') }}">
-                    <button type="submit" id="btn-forward" class="nav-button"><img class="forward-arrow" width="25px" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
-                </form>
+    <div id="container">
+
+        <div class="video-and-sensor-info">
+            <div class="video">
+                <img src="{{ url_for('video_feed') }}" height="100%">
             </div>
-            <div class="row2">
+            <div class="sensor-info-container">
+                <div class="sensor-heading">
+                    <h1>Sensor Info</h1>
+                    <button id="fullscreen-btn"><img src="{{ url_for('static', filename='img/fullscreen.png') }}"></button>
+                </div>
+                <br>
+                <div class="sensor-info">
+                    <div class="sensor-info-value-container">
+                        <div class="sensor-info-title">Latitude: </div>
+                        <div class="sensor-info">22.8978&deg;</div>
+                    </div>
+                </div>
+                <div class="sensor-info">
+                    <div class="sensor-info-value-container">
+                        <div class="sensor-info-title">Longitude: </div>
+                        <div class="sensor-info">49.5468&deg;</div>
+                    </div>
+                </div>
+                <div class="sensor-info">
+                    <div class="sensor-info-value-container">
+                        <div class="sensor-info-title">Ultrasonic: </div>
+                        <div class="sensor-info">46cm</div>
+                    </div>
+                </div>
+                <div class="sensor-info">
+                    <div class="sensor-info-value-container">
+                        <div class="sensor-info-title">Metal Detector: </div>
+                        <div class="sensor-info">2.4568nm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <div class="nav-buttons">
+                <form id="go-forward-form" method="POST" action="{{ url_for('move') }}">
+                    <button type="submit" id="btn-forward" class="nav-button"><img class="forward-arrow" height="100%" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
+                </form>
                 <form id="go-left-form" method="POST" action="{{ url_for('move') }}">
-                    <button type="submit" id="btn-left" class="nav-button"><img class="left-arrow" width="25px" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
+                    <button type="submit" id="btn-left" class="nav-button"><img class="left-arrow" height="100%" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
                 </form>
                 <form id="go-right-form" method="POST" action="{{ url_for('move') }}">
-                    <button type="submit" id="btn-right" class="nav-button"><img class="right-arrow" width="25px" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
+                    <button type="submit" id="btn-right" class="nav-button"><img class="right-arrow" height="100%" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
+                </form>
+                <form id="go-backward-form" method="POST" action="{{ url_for('move') }}">
+                    <button type="submit" id="btn-backward" class="nav-button"><img class="backward-arrow" height="100%" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
                 </form>
             </div>
-            <div class="row3">
-                <form id="go-backward-form" method="POST" action="{{ url_for('move') }}">
-                    <button type="submit" id="btn-backward" class="nav-button"><img class="backward-arrow" width="25px" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
-                </form>
+            <div class="arm-buttons">
+                <button id="arm-start-btn" class="arm-btn">Start</button>
+                <button id="arm-stop-btn" class="arm-btn">Stop</button>
             </div>
         </div>
     </div>  
@@ -177,6 +317,26 @@
                 },
             })
         })
+
+        container = document.getElementById("container")
+        fullScreenBtn = document.getElementById("fullscreen-btn")
+
+        fullScreenBtn.addEventListener('click', function(event) {
+	        if(container.requestFullscreen) {
+		        document.querySelector("#container").requestFullscreen()
+            } else if(container.webkitRequestFullScreen) {
+		        document.querySelector("#container").webkitRequestFullScreen()
+            }
+            
+	        screen.orientation.lock("landscape-primary").then(function() {
+		    	    _LOCK_BUTTON.style.display = 'none'
+		    	    _UNLOCK_BUTTON.style.display = 'block'
+            }.catch(function(error) {
+		        alert(error)
+		    })
+            )
+		})
+
     </script>
 </body>
 </html>
