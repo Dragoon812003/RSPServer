@@ -111,6 +111,13 @@
     height: 60px;
 }
 
+#stop-btn{
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    border: 2px solid black;
+}
+
 .arm-buttons{
     width: 30%;
     height: 100%;
@@ -128,28 +135,8 @@
     font-weight: 900;
     border: 2px solid black;
     transition: 0.25s;
-}
+    background-color: rgb(94, 94, 193);
 
-#arm-start-btn{
-    background-color: green;
-}
-
-#arm-start-btn:hover{
-    background-color: rgb(36, 153, 36);
-    font-size: x-large;
-    width: 90px;
-    height: 90px;
-}
-
-#arm-stop-btn{
-    background-color: red;
-}
-
-#arm-stop-btn:hover{
-    background-color: rgb(255, 50, 50);
-    font-size: x-large;
-    width: 90px;
-    height: 90px;
 }
 
 .forward-arrow{
@@ -175,7 +162,8 @@
 
         <div class="video-and-sensor-info">
             <div class="video">
-                <img src="{{ url_for('video_feed') }}" height="100%">
+                <!-- <img src="{{ url_for('video_feed') }}" height="100%"> -->
+                <img src="" height="100%">
             </div>
             <div class="sensor-info-container">
                 <div class="sensor-heading">
@@ -185,25 +173,25 @@
                 <br>
                 <div class="sensor-info">
                     <div class="sensor-info-value-container">
-                        <div class="sensor-info-title">Latitude: </div>
+                        <div class="sensor-info-title">Lat: </div>
                         <div class="sensor-info">22.8978&deg;</div>
                     </div>
                 </div>
                 <div class="sensor-info">
                     <div class="sensor-info-value-container">
-                        <div class="sensor-info-title">Longitude: </div>
+                        <div class="sensor-info-title">Long: </div>
                         <div class="sensor-info">49.5468&deg;</div>
                     </div>
                 </div>
                 <div class="sensor-info">
                     <div class="sensor-info-value-container">
-                        <div class="sensor-info-title">Ultrasonic: </div>
+                        <div class="sensor-info-title">ULS: </div>
                         <div class="sensor-info">46cm</div>
                     </div>
                 </div>
                 <div class="sensor-info">
                     <div class="sensor-info-value-container">
-                        <div class="sensor-info-title">Metal Detector: </div>
+                        <div class="sensor-info-title">MED: </div>
                         <div class="sensor-info">2.4568nm</div>
                     </div>
                 </div>
@@ -212,22 +200,29 @@
         
         <div class="buttons">
             <div class="nav-buttons">
-                <form id="go-forward-form" method="POST" action="{{ url_for('move') }}">
+                <form id="go-forward-form">
                     <button type="submit" id="btn-forward" class="nav-button"><img class="forward-arrow" height="100%" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
                 </form>
-                <form id="go-left-form" method="POST" action="{{ url_for('move') }}">
+                <form id="go-left-form">
                     <button type="submit" id="btn-left" class="nav-button"><img class="left-arrow" height="100%" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
                 </form>
-                <form id="go-right-form" method="POST" action="{{ url_for('move') }}">
+                <form id="break-form">
+                    <button type="submit" id="stop-btn" class="nav-button">Stop</button>
+                </form>
+                <form id="go-right-form">
                     <button type="submit" id="btn-right" class="nav-button"><img class="right-arrow" height="100%" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
                 </form>
-                <form id="go-backward-form" method="POST" action="{{ url_for('move') }}">
+                <form id="go-backward-form">
                     <button type="submit" id="btn-backward" class="nav-button"><img class="backward-arrow" height="100%" src="{{ url_for('static', filename='img/arrow.png') }}"></button>
                 </form>
             </div>
             <div class="arm-buttons">
-                <button id="arm-start-btn" class="arm-btn">Start</button>
-                <button id="arm-stop-btn" class="arm-btn">Stop</button>
+                <!-- <form id="arm-left-btn"> -->
+                    <button id="arm-left-btn" class="arm-btn">Left</button>
+                <!-- </form> -->
+                <!-- <form id="arm-right-btn"> -->
+                    <button id="arm-right-btn" class="arm-btn">Right</button>
+                <!-- </form> -->
             </div>
         </div>
     </div>  
@@ -288,6 +283,23 @@
             })
         })
 
+        $("#break-form").on('submit', function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: "{{ url_for('move') }}",
+                type:"POST",
+                data: {
+                    direction: "stop",
+                },
+
+                success: function(data) {
+                    console.log("success")
+                }
+            })
+        })
+
         $("#go-right-form").on('submit', function (e) {
 
             e.preventDefault();
@@ -317,6 +329,60 @@
                 },
             })
         })
+
+        armRightBtn = document.getElementById('arm-right-btn')
+        armLeftBtn = document.getElementById('arm-left-btn')
+
+        armRightBtn.addEventListener('mousedown', () => {
+            $.ajax({
+                url: "{{ url_for('arm_move') }}",
+                type: "POST",
+                data: {
+                    "type": "start",
+                    "direction": "right",
+                }
+            })
+        })
+
+        armRightBtn.addEventListener('mouseup', () => {
+            $.ajax({
+                url: "{{ url_for('arm_move') }}",
+                type: "POST",
+                data: {
+                    "type": "stop",
+                    "direction": "right",
+                }
+            })
+        })
+
+        armLeftBtn.addEventListener('mousedown', () => {
+            $.ajax({
+                url: "{{ url_for('arm_move') }}",
+                type: "POST",
+                data: {
+                    "type": "start",
+                    "direction": "left",
+                }
+            })
+        })
+
+        armLeftBtn.addEventListener('mouseup', () => {
+            $.ajax({
+                url: "{{ url_for('arm_move') }}",
+                type: "POST",
+                data: {
+                    "type": "stop",
+                    "direction": "left",
+                }
+            })
+        })
+
+const detectDeviceType = () =>
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    ? 'Mobile'
+    : 'Desktop';
+console.log(detectDeviceType()); // "Mobile" or "Desktop"
+
 
         container = document.getElementById("container")
         fullScreenBtn = document.getElementById("fullscreen-btn")
