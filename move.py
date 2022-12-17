@@ -3,10 +3,10 @@ import RPi.GPIO as gpio
 gpio.setmode(gpio.BOARD)
 
 def setup():
-    IR1 = 1     #right front
-    IR2 = 2    #right back
-    IL1 = 3    #left front
-    IL2 = 4    #left back
+    IR1 = 3     #right front
+    IR2 = 5    #right back
+    IL1 = 7    #left front
+    IL2 = 11    #left back
 
     AM1 = 5
     AM2 = 6
@@ -18,10 +18,10 @@ def setup():
     gpio.setup(IR2, gpio.OUT)
     gpio.setup(IL1, gpio.OUT)
     gpio.setup(IL2, gpio.OUT)
-    gpio.setup(AM1, gpio.OUT)
-    gpio.setup(AM2, gpio.OUT)
+    # gpio.setup(AM1, gpio.OUT)
+    # gpio.setup(AM2, gpio.OUT)
     # pwm = gpio.PWM(40, 100) 
-
+    
     # gpio.output(enable12, pwm)
     # gpio.output(enable34, pwm)
 
