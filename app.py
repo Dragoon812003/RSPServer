@@ -70,7 +70,7 @@ def sensor_data():
         return json.dumps({'distance': ultrasonic_distance})
     else:
         return redirect('/')
-
+ 
 # @app.route('/arm-move', methods=['GET', 'POST'])
 # def arm_move():
 #     if request.method == "POST":

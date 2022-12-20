@@ -380,18 +380,18 @@
         //     })
         // }
 
-        // ultrasonicDist = document.getElementById('ultrasonic-distance')
-        // setInterval(function() {
-        //     $.ajax({
-        //         url: "{{ url_for('arm_move') }}",
-        //         type: "POST",
-        //         data: {},
+        ultrasonicDist = document.getElementById('ultrasonic-distance')
+        setInterval(function() {
+            $.ajax({
+                url: "{{ url_for('sensor-data') }}",
+                type: "POST",
+                data: {},
 
-        //         success: function (data) {
-        //             ultrasonicDist.innerText = data
-        //         }
-        //     })
-        // }, 5000)
+                success: function (data) {
+                    ultrasonicDist.innerText = data
+                }
+            })
+        }, 5000)
 
         // armRightBtn.addEventListener('mousedown', armRightStart)
 
