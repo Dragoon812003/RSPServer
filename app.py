@@ -1,7 +1,7 @@
 from flask import Flask, render_template, Response, json, request, redirect
 import cv2
 import numpy as np
-import time
+from gps import *
 
 from move import *
 from ultrasonic import *
@@ -64,9 +64,12 @@ def move():
 def sensor_data():
     if request.method == "POST":
         ultrasonic_distance = distance(GPIO_TRIGGER, GPIO_ECHO)
+
+        lat_in_degrees, long_in_degrees = lat_long_degree()
+        print(lat_in_degrees, long_in_degrees)
         return json.dumps({'distance': ultrasonic_distance})
     else:
         return redirect('/')
 
 if __name__=='__main__':
-    app.run(debug=True,)
+    app.run(debug=True,)  
