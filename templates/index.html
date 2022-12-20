@@ -333,81 +333,81 @@
             })
         })
 
-        armRightBtn = document.getElementById('arm-right-btn')
-        armLeftBtn = document.getElementById('arm-left-btn')
+        // armRightBtn = document.getElementById('arm-right-btn')
+        // armLeftBtn = document.getElementById('arm-left-btn')
         
-        function armRightStop () {
-            $.ajax({
-                url: "{{ url_for('arm_move') }}",
-                type: "POST",
-                data: {
-                    "type": "stop",
-                    "direction": "right",
-                }
-            })
-        }
+        // function armRightStop () {
+        //     $.ajax({
+        //         url: "{{ url_for('arm_move') }}",
+        //         type: "POST",
+        //         data: {
+        //             "type": "stop",
+        //             "direction": "right",
+        //         }
+        //     })
+        // }
 
-        function armRightStart () {
-            $.ajax({
-                url: "{{ url_for('arm_move') }}",
-                type: "POST",
-                data: {
-                    "type": "start",
-                    "direction": "right",
-                }
-            })
-        }
+        // function armRightStart () {
+        //     $.ajax({
+        //         url: "{{ url_for('arm_move') }}",
+        //         type: "POST",
+        //         data: {
+        //             "type": "start",
+        //             "direction": "right",
+        //         }
+        //     })
+        // }
 
-        function armLeftStop () {
-            $.ajax({
-                url: "{{ url_for('arm_move') }}",
-                type: "POST",
-                data: {
-                    "type": "stop",
-                    "direction": "left",
-                }
-            })
-        }
+        // function armLeftStop () {
+        //     $.ajax({
+        //         url: "{{ url_for('arm_move') }}",
+        //         type: "POST",
+        //         data: {
+        //             "type": "stop",
+        //             "direction": "left",
+        //         }
+        //     })
+        // }
 
-        function armLeftStart () {
-            $.ajax({
-                url: "{{ url_for('arm_move') }}",
-                type: "POST",
-                data: {
-                    "type": "start",
-                    "direction": "left",
-                }
-            })
-        }
+        // function armLeftStart () {
+        //     $.ajax({
+        //         url: "{{ url_for('arm_move') }}",
+        //         type: "POST",
+        //         data: {
+        //             "type": "start",
+        //             "direction": "left",
+        //         }
+        //     })
+        // }
 
-        ultrasonicDist = document.getElementById('ultrasonic-distance')
-        setInterval(function() {
-            $.ajax({
-                url: "{{ url_for('arm_move') }}",
-                type: "POST",
-                data: {},
+        // ultrasonicDist = document.getElementById('ultrasonic-distance')
+        // setInterval(function() {
+        //     $.ajax({
+        //         url: "{{ url_for('arm_move') }}",
+        //         type: "POST",
+        //         data: {},
 
-                success: function (data) {
-                    ultrasonicDist.innerText = data
-                }
-            })
-        }, 5000)
+        //         success: function (data) {
+        //             ultrasonicDist.innerText = data
+        //         }
+        //     })
+        // }, 5000)
 
-        armRightBtn.addEventListener('mousedown', armRightStart)
+        // armRightBtn.addEventListener('mousedown', armRightStart)
 
-        armRightBtn.addEventListener('mouseup', armRightStop)
+        // armRightBtn.addEventListener('mouseup', armRightStop)
 
-        armLeftBtn.addEventListener('mousedown', armLeftStart)
+        // armLeftBtn.addEventListener('mousedown', armLeftStart)
 
-        armLeftBtn.addEventListener('mouseup', armLeftStop)
+        // armLeftBtn.addEventListener('mouseup', armLeftStop)
 
-        armRightBtn.addEventListener('touchstart', armRightStart)
+        // armRightBtn.addEventListener('touchstart', armRightStart)
 
-        armRightBtn.addEventListener('touchend', armRightStop)
+        // armRightBtn.addEventListener('touchend', armRightStop)
 
-        armLeftBtn.addEventListener('touchstart', armLeftStart)
+        // armLeftBtn.addEventListener('touchstart', armLeftStart)
 
-        armLeftBtn.addEventListener('touchend', armLeftStop)
+        // armLeftBtn.addEventListener('touchend', armLeftStop)
 
 const detectDeviceType = () =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)

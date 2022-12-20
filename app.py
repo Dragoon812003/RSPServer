@@ -68,26 +68,28 @@ def sensor_data():
     if request.method == "POST":
         ultrasonic_distance = distance(GPIO_TRIGGER, GPIO_ECHO)
         return json.dumps({'distance': ultrasonic_distance})
-
-@app.route('/arm-move', methods=['GET', 'POST'])
-def arm_move():
-    if request.method == "POST":
-        direction = request.form['direction']
-        type = request.form['type']
-
-        if type == "start":
-            if direction == "right":
-                # arm_right_start()
-                print("moving right")
-            elif direction == "left":
-                # arm_left_start()
-                print("moving left")
-        else:
-            # arm_stop()
-            print("arm stopped")
-        return json.dumps({'status': 'OK'})
     else:
         return redirect('/')
+
+# @app.route('/arm-move', methods=['GET', 'POST'])
+# def arm_move():
+#     if request.method == "POST":
+#         direction = request.form['direction']
+#         type = request.form['type']
+
+#         if type == "start":
+#             if direction == "right":
+#                 # arm_right_start()
+#                 print("moving right")
+#             elif direction == "left":
+#                 # arm_left_start()
+#                 print("moving left")
+#         else:
+#             # arm_stop()
+#             print("arm stopped")
+#         return json.dumps({'status': 'OK'})
+#     else:
+#         return redirect('/')
 
 if __name__=='__main__':
     app.run(debug=True,)
