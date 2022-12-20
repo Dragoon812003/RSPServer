@@ -341,9 +341,8 @@
                 data: {},
 
                 success: function (data) {
-                    data = JSON.stringify(data)
                     parsedData = JSON.parse(data)
-                    ultraSonicDist = parsedData.distance
+                    ultraSonicDist = parsedData.distance 
                     ultrasonicDistElem.innerText = `${ultraSonicDist.toFixed(2)}cm`
                 }
             })
