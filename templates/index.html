@@ -333,18 +333,20 @@
             })
         })
 
-        ultrasonicDist = document.getElementById('ultrasonic-distance')
+        ultrasonicDistElem = document.getElementById('ultrasonic-distance')
         setInterval(function() {
             $.ajax({
-                url: "{{ url_for('sensor-data') }}",
+                url: "{{ url_for('sensor_data') }}",
                 type: "POST",
                 data: {},
 
                 success: function (data) {
-                    ultrasonicDist.innerText = data
+                    parsedData = JSON.parse(data)
+                    ultraSonicDist = parsedData.distance
+                    ultrasonicDistElem = `${ultraSonicDist} mm`
                 }
             })
-        }, 5000)
+        }, 500)
 
         // armRightBtn.addEventListener('mousedown', armRightStart)
 

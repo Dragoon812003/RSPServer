@@ -63,7 +63,7 @@ def move():
     else:
         return redirect('/')
 
-@app.route('/sensor-data', methods=['GET', 'POST'])
+@app.route('/sensor_data', methods=['GET', 'POST'])
 def sensor_data():
     if request.method == "POST":
         ultrasonic_distance = distance(GPIO_TRIGGER, GPIO_ECHO)
