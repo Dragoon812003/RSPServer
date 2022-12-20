@@ -3,15 +3,14 @@ import cv2
 import numpy as np
 import time
 
-from ultrasonic import ultrasonic_setup
-# from move import *
+from move import *
 from ultrasonic import *
 
 app=Flask(__name__)
 camera = cv2.VideoCapture(0)
 
 arm_moving = False
-# IR1, IR2, IL1, IL2 = setup()
+IR1, IR2, IL1, IL2 = setup()
 GPIO_TRIGGER, GPIO_ECHO = ultrasonic_setup()
 
 process_this_frame = True
@@ -57,12 +56,18 @@ def move():
         elif direction == "stop":
             # stop(IR1, IR2, IL1, IL2)
             pass
-        print(direction)
-        dist = distance(GPIO_TRIGGER, GPIO_ECHO)
-        print(dist)
+        # print(direction)
+        # dist = distance(GPIO_TRIGGER, GPIO_ECHO)
+        # print(dist)
         return json.dumps({'status': 'OK'})
     else:
         return redirect('/')
+
+@app.route('/sensor-data', methods=['GET', 'POST'])
+def sensor_data():
+    if request.method == "POST":
+        ultrasonic_distance = distance(GPIO_TRIGGER, GPIO_ECHO)
+        return json.dumps({'distance': ultrasonic_distance})
 
 @app.route('/arm-move', methods=['GET', 'POST'])
 def arm_move():

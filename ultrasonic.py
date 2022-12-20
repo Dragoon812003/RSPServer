@@ -3,8 +3,8 @@ import time
 
 #set GPIO direction (IN / OUT)
 def ultrasonic_setup():
-    GPIO_TRIGGER = 18
-    GPIO_ECHO = 24
+    GPIO_TRIGGER = 23
+    GPIO_ECHO = 32
     GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
     GPIO.setup(GPIO_ECHO, GPIO.IN)
     
