@@ -18,8 +18,8 @@ def setup():
     gpio.setup(IR2, gpio.OUT)
     gpio.setup(IL1, gpio.OUT)
     gpio.setup(IL2, gpio.OUT)
-    # gpio.setup(AM1, gpio.OUT)
-    # gpio.setup(AM2, gpio.OUT)
+    gpio.setup(AM1, gpio.OUT)
+    gpio.setup(AM2, gpio.OUT)
     # pwm = gpio.PWM(40, 100) 
     
     # gpio.output(enable12, pwm)

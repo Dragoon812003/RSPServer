@@ -30,7 +30,7 @@ def convert_to_degrees(raw_value):
     return position
     
 gpgga_info = "$GPGGA,"
-ser = serial.Serial ("/dev/ttyS0")              #Open port with baud rate
+ser = serial.Serial ("UART0_RXD")              #Open port with baud rate
 GPGGA_buffer = 0
 NMEA_buff = 0
 lat_in_degrees = 0

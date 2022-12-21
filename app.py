@@ -1,10 +1,11 @@
 from flask import Flask, render_template, Response, json, request, redirect
 import cv2
 import numpy as np
-from gps import *
 
 from move import *
 from ultrasonic import *
+from gps import *
+from metal_detector import *
 
 app=Flask(__name__)
 camera = cv2.VideoCapture(0)
@@ -60,14 +61,35 @@ def move():
     else:
         return redirect('/')
 
+@app.route('/arm_move', methods=['GET', 'POST'])
+def arm_move():
+    if request.method == "POST":
+        direction = request.form['direction']
+        type = request.form['type']
+
+        if type == "start":
+            if direction == "right":
+                arm_right_start()
+                print("moving right")
+            elif direction == "left":
+                arm_left_start()
+                print("moving left")
+        else:
+            arm_stop()
+            print("arm stopped")
+        return json.dumps({'status': 'OK'})
+    else:
+        return redirect('/')
+
 @app.route('/sensor_data', methods=['GET', 'POST'])
 def sensor_data():
     if request.method == "POST":
         ultrasonic_distance = distance(GPIO_TRIGGER, GPIO_ECHO)
 
         lat_in_degrees, long_in_degrees = lat_long_degree()
+        metal_detector = countfreq()
         print(lat_in_degrees, long_in_degrees)
-        return json.dumps({'distance': ultrasonic_distance})
+        return json.dumps({'distance': ultrasonic_distance, 'metal_detector': metal_detector})
     else:
         return redirect('/')
 

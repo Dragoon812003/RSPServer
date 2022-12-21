@@ -191,7 +191,7 @@
                 <div class="sensor-info">
                     <div class="sensor-info-value-container">
                         <div class="sensor-info-title">MED: </div>
-                        <div class="sensor-info">2.4568nm</div>
+                        <div id="metal-detector" class="sensor-info">2.4568nm</div>
                     </div>
                 </div>
             </div>
@@ -332,7 +332,56 @@
             })
         })
 
+        //Arm Controls
+        armRightBtn = document.getElementById('arm-right-btn')
+        armLeftBtn = document.getElementById('arm-left-btn')
+        
+        function armRightStop () {
+            $.ajax({
+                url: "{{ url_for('arm_move') }}",
+                type: "POST",
+                data: {
+                    "type": "stop",
+                    "direction": "right",
+                }
+            })
+        }
+
+        function armRightStart () {
+            $.ajax({
+                url: "{{ url_for('arm_move') }}",
+                type: "POST",
+                data: {
+                    "type": "start",
+                    "direction": "right",
+                }
+            })
+        }
+
+        function armLeftStop () {
+            $.ajax({
+                url: "{{ url_for('arm_move') }}",
+                type: "POST",
+                data: {
+                    "type": "stop",
+                    "direction": "left",
+                }
+            })
+        }
+
+        function armLeftStart () {
+            $.ajax({
+                url: "{{ url_for('arm_move') }}",
+                type: "POST",
+                data: {
+                    "type": "start",
+                    "direction": "left",
+                }
+            })
+        }
+
         ultrasonicDistElem = document.getElementById('ultrasonic-distance')
+        metalDetectorElem = document.getElementById('metal-detector')
         setInterval(function() {
             $.ajax({
                 url: "{{ url_for('sensor_data') }}",
@@ -342,7 +391,10 @@
                 success: function (data) {
                     parsedData = JSON.parse(data)
                     ultraSonicDist = parsedData.distance 
+                    metalDetector = parsedData.metal_detector
+
                     ultrasonicDistElem.innerText = `${ultraSonicDist.toFixed(2)}cm`
+                    metalDetectorElem.innerText = `${metalDetector .toFixed(2)}cm`
                 }
             })
         }, 500)
