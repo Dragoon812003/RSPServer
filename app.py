@@ -4,7 +4,7 @@ import numpy as np
 
 from move import *
 from ultrasonic import *
-from gps import *
+# from gps import *
 from metal_detector import *
 
 app=Flask(__name__)
@@ -86,9 +86,9 @@ def sensor_data():
     if request.method == "POST":
         ultrasonic_distance = distance(GPIO_TRIGGER, GPIO_ECHO)
 
-        lat_in_degrees, long_in_degrees = lat_long_degree()
+        # lat_in_degrees, long_in_degrees = lat_long_degree()
+        # print(lat_in_degrees, long_in_degrees)
         metal_detector = countfreq()
-        print(lat_in_degrees, long_in_degrees)
         return json.dumps({'distance': ultrasonic_distance, 'metal_detector': metal_detector})
     else:
         return redirect('/')
