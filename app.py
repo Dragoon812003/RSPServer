@@ -72,13 +72,13 @@ def arm_move():
 
         if type == "start":
             if direction == "right":
-                arm_right_start()
+                arm_right_start(AM1, AM2)
                 print("moving right")
             elif direction == "left":
-                arm_left_start()
+                arm_left_start(AM1, AM2)
                 print("moving left")
         else:
-            arm_stop()
+            arm_stop(AM1, AM2)
             print("arm stopped")
         return json.dumps({'status': 'OK'})
     else:

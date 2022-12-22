@@ -58,12 +58,12 @@ def stop(IR1, IR2, IL1, IL2):
     gpio.output(IL2, False)
 
 def arm_right_start(AM1, AM2):
-    gpio.output(AM1, True)
-    gpio.output(AM2, False)
-
-def arm_left_start(AM1, AM2):
     gpio.output(AM1, False)
     gpio.output(AM2, True)
+
+def arm_left_start(AM1, AM2):
+    gpio.output(AM1, True)
+    gpio.output(AM2, False)
 
 def arm_stop(AM1, AM2):
     gpio.output(AM1, False)
