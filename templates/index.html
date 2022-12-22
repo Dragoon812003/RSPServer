@@ -41,28 +41,34 @@
 
 .sensor-heading{
     display: flex;
+    justify-content: space-between;
+    margin-right: 25px;
+    margin-left: 25px;
 }
 
-.sensor-heading h1{
+/* .sensor-heading div h1{
     margin-left: auto;
     margin-right: auto;
-}
+} */
 
 #fullscreen-btn{
-    margin-right: 25px;
     background: transparent;
 }
 
 .sensor-info{
     width: 100%;
-}   
+}
+
+.sensor-info-heading{
+    font-size: medium;
+}
 
 .sensor-info-value-container{
     margin-left: 15px;
     display: flex;
     font-size: x-large;
     width: 100%;
-    margin-top: 15px;
+    margin-top: 7.5px;
 }
 
 @media screen and (max-width: 768px) {
@@ -70,9 +76,10 @@
         font-size: small;
     }
 
-    #fullscreen-btn{
-    margin-right: 0px;
-}
+    .sensor-heading{
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 .sensor-info-title{
@@ -91,7 +98,7 @@
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     background-color: azure;
 }
 
@@ -103,11 +110,13 @@
 }
 
 #stop-btn{
-    width: 50px;
-    height: 50px;
+    width: 75px;
+    height: 75px;
     background-color: red;
     border: 2px solid black;
-}
+    font-weight: bolder;
+    font-size: larger;
+} 
 
 .arm-buttons{
     width: 30%;
@@ -130,7 +139,13 @@
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none;
+}
 
+#detector-button{
+    background: transparent;
+    border: none;
+    width: 50px;
+    height: 50px;
 }
 
 .forward-arrow{
@@ -160,26 +175,32 @@
 
         <div class="video-and-sensor-info">
             <div class="video">
-                <!-- <img src="{{ url_for('video_feed') }}" height="100%"> -->
-                <img src="" height="100%">
+                <img src="{{ url_for('video_feed') }}" height="100%">
+                <!-- <img src="" height="100%"> -->
             </div>
             <div class="sensor-info-container">
                 <div class="sensor-heading">
-                    <h1>Sensor Info</h1>
-                    <button id="fullscreen-btn" class=""><img src="{{ url_for('static', filename='img/fullscreen.png') }}"></button>
-                    <button id="fullscreen-exit-btn" class="hidden"><img src="{{ url_for('static', filename='img/fullscreen-exit.png') }}"></button>
+                    <div>
+                        <img src="{{ url_for('static', filename='img/AU_Logo.png') }}" width="50px" height="50px">
+                        <img src="{{ url_for('static', filename='img/rudrabots_logo.png') }}" width="50px" height="50px">
+                    </div>
+                    <div class="sensor-info-heading"><h1>Sensor Info</h1></div>
+                    <div>
+                        <button id="fullscreen-btn" class=""><img src="{{ url_for('static', filename='img/fullscreen.png') }}"></button>
+                        <button id="fullscreen-exit-btn" class="hidden"><img src="{{ url_for('static', filename='img/fullscreen-exit.png') }}"></button>
+                    </div>
                 </div>
                 <br>
                 <div class="sensor-info">
                     <div class="sensor-info-value-container">
-                        <div class="sensor-info-title">Lat: </div>
-                        <div class="sensor-info">22.8978&deg;</div>
+                        <div class="sensor-info-title">LAT: </div>
+                        <div id="latitude" class="sensor-info"></div>
                     </div>
                 </div>
                 <div class="sensor-info">
                     <div class="sensor-info-value-container">
-                        <div class="sensor-info-title">Long: </div>
-                        <div class="sensor-info">49.5468&deg;</div>
+                        <div class="sensor-info-title">LONG: </div>
+                        <div id="longitude" class="sensor-info"></div>
                     </div>
                 </div>
                 <div class="sensor-info">
@@ -191,7 +212,7 @@
                 <div class="sensor-info">
                     <div class="sensor-info-value-container">
                         <div class="sensor-info-title">MED: </div>
-                        <div id="metal-detector" class="sensor-info">2.4568nm</div>
+                        <div id="metal-detector" class="sensor-info"></div>
                     </div>
                 </div>
             </div>
@@ -220,6 +241,7 @@
                     <button id="arm-left-btn" class="arm-btn">Left</button>
                 <!-- </form> -->
                 <!-- <form id="arm-right-btn"> -->
+                    <button id="detector-button" class="arm-btn"></button>
                     <button id="arm-right-btn" class="arm-btn">Right</button>
                 <!-- </form> -->
             </div>
@@ -336,6 +358,17 @@
         armRightBtn = document.getElementById('arm-right-btn')
         armLeftBtn = document.getElementById('arm-left-btn')
         
+        function armRightStart () {
+            $.ajax({
+                url: "{{ url_for('arm_move') }}",
+                type: "POST",
+                data: {
+                    "type": "start",
+                    "direction": "right",
+                }    
+            })
+        }
+
         function armRightStop () {
             $.ajax({
                 url: "{{ url_for('arm_move') }}",
@@ -347,16 +380,6 @@
             })
         }
 
-        function armRightStart () {
-            $.ajax({
-                url: "{{ url_for('arm_move') }}",
-                type: "POST",
-                data: {
-                    "type": "start",
-                    "direction": "right",
-                }
-            })
-        }
 
         function armLeftStop () {
             $.ajax({
@@ -380,8 +403,105 @@
             })
         }
 
-        ultrasonicDistElem = document.getElementById('ultrasonic-distance')
-        metalDetectorElem = document.getElementById('metal-detector')
+        const ultrasonicDistElem = document.getElementById('ultrasonic-distance')
+        const metalDetectorElem = document.getElementById('metal-detector')
+        const detectorButton = document.getElementById('detector-button')
+        const detectorButtonForm = document.getElementById('detector-button-form')
+        let toIncrease = false
+
+        function detectorIncrease(e) {
+
+            e.preventDefault()
+
+            $.ajax({
+                url: "{{ url_for('detector_form') }}",
+                type: "POST",
+                data: {
+                    "type": "increase",
+                },
+            })
+        }
+
+        function detectorDecrease(e) {
+
+            e.preventDefault()
+
+            $.ajax({
+                url: "{{ url_for('detector_form') }}",
+                type: "POST",
+                data: {
+                    "type": "decrease",
+                },
+            })
+        }
+
+        function detectorData() {
+            $.ajax({
+                url: "{{ url_for('detector_data') }}",
+                type: "POST",
+                data: {},
+
+                success: function (data) {
+                    parsedData = JSON.parse(data)
+                    metalDetectorElem.innerText = parsedData.metal_value
+                },
+            })
+        }
+
+        detectorButton.addEventListener('mousedown', (e) => {
+
+            e.preventDefault()
+
+            $.ajax({
+                url: "{{ url_for('detector_form') }}",
+                type: "POST",
+                data: {
+                    "type": "increase",
+                },
+            })
+        })
+        
+        detectorButton.addEventListener('mouseup', (e) => {
+            e.preventDefault()
+
+            $.ajax({
+                url: "{{ url_for('detector_form') }}",
+                type: "POST",
+                data: {
+                    "type": "decrease",
+                },
+            })
+        })
+
+        detectorButton.addEventListener('touchstart', (e) => {
+
+            e.preventDefault()
+
+            $.ajax({
+                url: "{{ url_for('detector_form') }}",
+                type: "POST",
+                data: {
+                    "type": "increase",
+                },
+            })
+        })
+
+        detectorButton.addEventListener('touchend', (e) => {
+
+            e.preventDefault()
+
+            $.ajax({
+                url: "{{ url_for('detector_form') }}",
+                type: "POST",
+                data: {
+                    "type": "decrease",
+                },
+            })
+        })
+
+        const latitudeElem = document.getElementById('latitude')
+        const longitudeElem = document.getElementById('longitude')
+
         setInterval(function() {
             $.ajax({
                 url: "{{ url_for('sensor_data') }}",
@@ -391,29 +511,40 @@
                 success: function (data) {
                     parsedData = JSON.parse(data)
                     ultraSonicDist = parsedData.distance 
-                    metalDetector = parsedData.metal_detector
+                    latitude = parsedData.latitude
+                    longitude = parsedData.longitude
 
                     ultrasonicDistElem.innerText = `${ultraSonicDist.toFixed(2)}cm`
-                    metalDetectorElem.innerText = `${metalDetector .toFixed(2)}cm`
+                    latitudeElem.innerHTML = `${latitude}&deg;`
+                    longitudeElem.innerHTML = `${longitude}&deg;`
                 }
             })
-        }, 500)
 
-        // armRightBtn.addEventListener('mousedown', armRightStart)
+            // if (buttonClicked) {
+            //     metalDetectorElem.innerText = (Math.random() * 3000 + 1000).toFixed(6)
+            // } else {
+            //     metalDetectorElem.innerText = (Math.random() * 300).toFixed(6)
+            // }
+                
+            detectorData()
 
-        // armRightBtn.addEventListener('mouseup', armRightStop)
+        }, 1000)
 
-        // armLeftBtn.addEventListener('mousedown', armLeftStart)
+        armRightBtn.addEventListener('mousedown', armRightStart)
 
-        // armLeftBtn.addEventListener('mouseup', armLeftStop)
+        armRightBtn.addEventListener('mouseup', armRightStop)
 
-        // armRightBtn.addEventListener('touchstart', armRightStart)
+        armLeftBtn.addEventListener('mousedown', armLeftStart)
 
-        // armRightBtn.addEventListener('touchend', armRightStop)
+        armLeftBtn.addEventListener('mouseup', armLeftStop)
 
-        // armLeftBtn.addEventListener('touchstart', armLeftStart)
+        armRightBtn.addEventListener('touchstart', armRightStart)
 
-        // armLeftBtn.addEventListener('touchend', armLeftStop)
+        armRightBtn.addEventListener('touchend', armRightStop)
+
+        armLeftBtn.addEventListener('touchstart', armLeftStart)
+
+        armLeftBtn.addEventListener('touchend', armLeftStop)
 
         const detectDeviceType = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
 
@@ -428,16 +559,11 @@
 		        container.webkitRequestFullScreen()
             }
             
-            console.log(fullScreenBtn)
-            console.log(fullScreenExitBtn)
             fullScreenBtn.classList.add('hidden')
             fullScreenExitBtn.classList.remove('hidden')
-            console.log(fullScreenBtn)
-            console.log(fullScreenExitBtn)
 
             if (detectDeviceType() === "Mobile") {
 	            screen.orientation.lock("landscape-primary").then(function() {
-                    console.log("Entered Full Screen")
                     }.catch(function(error) {
 		                alert(error)
 		            })

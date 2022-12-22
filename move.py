@@ -8,8 +8,8 @@ def setup():
     IL1 = 7    #left front
     IL2 = 11    #left back
 
-    AM1 = 5
-    AM2 = 6
+    AM1 = 37
+    AM2 = 35
 
     # enable12 = 9
     # enable34 = 10

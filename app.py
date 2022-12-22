@@ -1,14 +1,17 @@
 from flask import Flask, render_template, Response, json, request, redirect
 import cv2
 import numpy as np
+import random
 
 from move import *
 from ultrasonic import *
 # from gps import *
-from metal_detector import *
+# from metal_detector import *
 
 app=Flask(__name__)
 camera = cv2.VideoCapture(0)
+metal_value = 0
+type = "decrease"
 
 IR1, IR2, IL1, IL2, AM1, AM2 = setup()
 GPIO_TRIGGER, GPIO_ECHO = ultrasonic_setup()
@@ -88,8 +91,31 @@ def sensor_data():
 
         # lat_in_degrees, long_in_degrees = lat_long_degree()
         # print(lat_in_degrees, long_in_degrees)
-        metal_detector = countfreq()
-        return json.dumps({'distance': ultrasonic_distance, 'metal_detector': metal_detector})
+        # metal_detector = countfreq()
+        # return json.dumps({'distance': ultrasonic_distance, 'metal_detector': metal_detector})
+        latitude = round(random.uniform(23.0378500, 23.0379000), 6)
+        longitude = round(random.uniform(72.5517800, 72.5518200), 6)
+        return json.dumps({'latitude': latitude, 'longitude': longitude, 'distance': ultrasonic_distance})
+    else:
+        return redirect('/')
+
+@app.route('/detector_form', methods=['GET', 'POST'])
+def detector_form():
+    if request.method == "POST":
+        global type
+        type = request.form['type']
+        return json.dumps({})
+    else:
+        return redirect('/')
+
+@app.route('/detector_data', methods=['GET', 'POST'])
+def detector_data():
+    if request.method == "POST":
+        if type == "increase":
+            metal_value = round(random.uniform(8000, 12000), 6)
+        else:
+            metal_value = round(random.uniform(300, 600), 6)
+        return json.dumps({'metal_value': metal_value})
     else:
         return redirect('/')
 
