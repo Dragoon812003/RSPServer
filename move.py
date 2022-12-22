@@ -5,7 +5,7 @@ gpio.setmode(gpio.BOARD)
 def setup():
     IR1 = 3     #right front
     IR2 = 5    #right back
-    IL1 = 7    #left front
+    IL1 = 15    #left front
     IL2 = 11    #left back
 
     AM1 = 37
